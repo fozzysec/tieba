@@ -22,3 +22,4 @@ class ThreadItem(scrapy.Item):
     date = scrapy.Field()
 
 class NoneItem(scrapy.Item):
+    pass
