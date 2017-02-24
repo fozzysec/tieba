@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 
+use utf8;
 use Cwd qw(abs_path);
 use File::Basename;
 use feature qw(say);
@@ -30,10 +31,11 @@ my $curr_pid = 1;
 while(<$FH>){
 	chomp;
 	next if /^(\s*(#.*)?)?$/;
-	my @array = split(/:/, $_);
+	my @array = split(/:/);
 	my $keyword = $array[0];
 	my $file = $array[2];
 
+	LOOP:
 	$counter++;
 	if($counter <= $workers){
 
@@ -52,6 +54,7 @@ while(<$FH>){
 			waitpid($_, WNOHANG);
 		}
 		$counter = 0;
+		goto LOOP;
 	}
 }
 
