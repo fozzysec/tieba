@@ -14,7 +14,7 @@ chomp($config);
 my @config = split(/:/, $config);
 my $fuzz_keywords = $config[0];
 my @keywords = split(/\|/, $config[1]);
-my $lv = 15;
+my $lv = 16;
 my $filter = 'filters/none.conf';
 my $counter = 0;
 my $tmpdir = '/tmp';
