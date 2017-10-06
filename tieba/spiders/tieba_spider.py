@@ -34,6 +34,8 @@ class TiebaSpider(scrapy.Spider):
         for div in div_spost:
 
             thread_url = div.xpath('.//span[@class="p_title"]/a[@class="bluelink"]/@href').extract_first()
+            if('tieba.baidu.com' in thread_url):
+                continue
 
             s = ''
             thread_title = ''

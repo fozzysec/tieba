@@ -47,7 +47,7 @@ def main(processes):
         os.system('{}/{} {}/{}/{} {}/{}-{}.jl'.format(path, dedup, tmpdir, fuzz_keywords, keyword_id, summarydir, fuzz_keywords, keyword_id))
         os.system('{}/{} {}/{}-{}.jl > {}/{}-{}.html'.format(path, generator, summarydir, fuzz_keywords, keyword_id, summarydir, fuzz_keywords, keyword_id))
         for email in emails:
-            sendmail = os.popen("mutt -e 'set content_type=text/html' -s '{}' {}".format(keywords, email), 'w')
+            sendmail = os.popen("mutt -e 'set content_type=text/html' -s '{}' {}".format(fuzz_keywords, email), 'w')
             with open('{}/{}-{}.html'.format(summarydir, fuzz_keywords, keyword_id), 'r', encoding='utf8') as f:
                 for line in f.readlines():
                     sendmail.write(line)
