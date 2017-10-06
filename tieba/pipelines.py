@@ -121,9 +121,25 @@ class FilterPipeline(object):
                 if key in post_content:
                     raise DropItem("Filter keyword %s found in content, drop it" % key)
 
+            post_content = div.xpath('./text()')
+            b_matched = False
+            item['preview'] = []
+            for row in post_content:
+                matched_counter = 0
+                for keyword in item['keywords']:
+                    if keyword in row:
+                        matched_counter+=1
+                if(matched_counter == len(item['keywords'])):
+                    b_matched = True
+                    item['preview'].append(row)
+
+            if not b_matched:
+                raise DropItem("keywords not found in content, drop it")
+
+            item['preview'] = '<br>'.join(item['preview'])
+
             for keyword in item['keywords']:
-                if keyword not in post_content:
-                    raise DropItem("keyword %s not found in content, drop it" % keyword)
+                item['preview'] = re.sub(keyword, '<font color="red">{}</font>'.format(keyword), item['preview'])
         except DropItem as e:
             logging.log(logging.INFO, "DropItem: %s" % e)
         except IndexError:

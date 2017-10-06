@@ -13,15 +13,19 @@ class TiebaSpider(scrapy.Spider):
     name = "tieba"
 
     def start_requests(self):
+        fuzz_keywords_string = getattr(self, 'fuzz_keywords', None)
+        fuzz_keywords = fuzz_keywords_string.split()
         keywords_string = getattr(self, 'keywords', None)
         keywords = keywords_string.split()
-        if keywords is None:
+        if keywords is None or fuzz_keywords is None:
             raise NotConfigured('Keyword not set')
         self.keywords = keywords
-        print('Current keywords:')
-        for keyword in keywords:
-            print("%s" % keyword)
-        encoded_querystring = quote_plus(' '.join(keywords))
+        self.fuzz_keywords = fuzz_keywords
+
+        print('Current keywords: {}'.format(' '.join(keywords)))
+        print('Current fuzz keywords: {}'.format(' '.join(fuzz_keywords)))
+
+        encoded_querystring = quote_plus(' '.join(fuzz_keywords))
         url = tieba_url % encoded_querystring
         yield scrapy.Request(url=url, callback=self.parse)
 
