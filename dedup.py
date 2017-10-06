@@ -24,7 +24,6 @@ uniq_records = []
 for record in records:
     checksum = crc32(record['preview'].encode('utf8'))
     if checksum in hash_table:
-        print(record['preview'])
         continue
     else:
         hash_table.append(checksum)

@@ -101,7 +101,6 @@ class FilterPipeline(object):
     @callback_args
     def process_response(self, response, item):
         anchor = item['url'].split('#')[1]
-        print("%s get anchor: %s" % (response.url, anchor))
 
         doc = lxml.etree.HTML(response.body, etree.HTMLParser(encoding="utf-8"))
         try:
@@ -127,7 +126,7 @@ class FilterPipeline(object):
             for row in post_content:
                 matched_counter = 0
                 for keyword in item['keywords']:
-                    if keyword in row:
+                    if re.findall(keyword, row):
                         matched_counter+=1
                 if(matched_counter == len(item['keywords'])):
                     b_matched = True
@@ -139,7 +138,9 @@ class FilterPipeline(object):
             item['preview'] = '<br>'.join(item['preview'])
 
             for keyword in item['keywords']:
-                item['preview'] = re.sub(keyword, '<font color="red">{}</font>'.format(keyword), item['preview'])
+                match = re.findall(keyword, item['preview'])
+                for key in set(match):
+                    item['preview'] = re.sub(key, '<font color="red">{}</font>'.format(key), item['preview'])
         except DropItem as e:
             logging.log(logging.INFO, "DropItem: %s" % e)
         except IndexError:
