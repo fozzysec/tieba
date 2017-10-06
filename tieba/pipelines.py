@@ -74,29 +74,19 @@ def callback_args(f):
     return wrapper
 
 class FilterPipeline(object):
-    def __init__(self, filterlist, filteruserrank, crawler):
+    def __init__(self, crawler):
         self.cookiejar = http.cookiejar.CookieJar()
         self.filter_opener = urllib.request.build_opener(urllib.request.HTTPCookieProcessor(self.cookiejar))
-        self.filterlistname = filterlist
-        self.userrank = int(filteruserrank)
         self.crawler = crawler
 
     @classmethod
     def from_crawler(self, crawler):
-        filterlist = crawler.settings.get('FILTER')
-        userrank = crawler.settings.get('USER_RANK')
         return self(
-                filterlist = filterlist,
-                filteruserrank = userrank,
                 crawler = crawler
                 )
 
     def open_spider(self, spider):
-        fh = open(self.filterlistname, "r")
-        if fh is None:
-            raise CloseSpider("Can not open filterlist")
-        self.filterlist = fh.read().splitlines()
-        fh.close()
+        return
 
     @callback_args
     def process_response(self, response, item):
@@ -104,21 +94,10 @@ class FilterPipeline(object):
 
         doc = lxml.etree.HTML(response.body, etree.HTMLParser(encoding="utf-8"))
         try:
-            div = doc.xpath('//a[@class="l_post_anchor" and @name="%s"]/following-sibling::div//div[@class="d_badge_lv"]' % anchor)
-            current_rank = div[0]
-            current_rank = int(current_rank.text)
-
-            if(current_rank >= self.userrank):
-                raise DropItem("found user rank(%d) >= USER_RANK(%d)" % (current_rank, self.userrank))
-
             div = doc.xpath('//div[@id="post_content_%s"]' % anchor)[0]
 
             post_content = etree.tostring(div, method="text", encoding='utf-8').decode('utf-8')
             post_content = html.unescape(post_content)
-
-            for key in self.filterlist:
-                if key in post_content:
-                    raise DropItem("Filter keyword %s found in content, drop it" % key)
 
             post_content = div.xpath('./text()')
             b_matched = False

@@ -1,0 +1,19 @@
+<xml>
+	<fuzz keyword="秀萝">
+		<record id="1">
+			<keyword>秀萝 五红 白螺母</keyword>
+			<email>fozzy@fozzy.co</email>
+			<email>fozzysec@gmail.com</email>
+		</record>
+		<record id="2">
+			<keyword>秀萝 五红 红彩云</keyword>
+			<email>fozzy@fozzy.co</email>
+		</record>
+	</fuzz>
+	<fuzz keyword="秀姐">
+		<record id="3">
+			<keyword>秀姐 五红 粉白菜</keyword>
+			<email>h4ck@foxmail.com</email>
+		</record>
+	</fuzz>
+</xml>

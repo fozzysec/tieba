@@ -3,14 +3,18 @@
 use utf8;
 use Cwd qw(abs_path);
 use File::Basename;
+use File::Path qw(make_path);
 use feature qw(say);
 use open ':std', ':encoding(UTF-8)';
 use Time::HiRes qw(usleep);
+
 my $path = dirname(abs_path(__FILE__)).'/';
 my $config_file = $path.'row_generate.conf';
 open(FH, '<:encoding(utf8)', $config_file) or die $!;
-my $config = <FH>;
-chomp($config);
+my @config_content = <FH>;
+chomp foreach(@config_content);
+say foreach(@config_content);
+die;
 my @config = split(/:/, $config);
 my $fuzz_keywords = $config[0];
 my @keywords = split(/\|/, $config[1]);
